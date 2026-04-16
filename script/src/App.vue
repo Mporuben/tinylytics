@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const uuid = ref('')
 const pageLoadTime = Date.now()
+const trackingPixel = ref(null)  // Reference to the tracking pixel image
 
 const setupUUID = () => {
   let visitorUUID = localStorage.getItem('tlfab_uuid')
@@ -28,26 +29,21 @@ const getReferrer = () => {
   return document.referrer || ''
 }
 
-// Core tracking function - sends data to backend via GET request
-const track = async (event, extra = {}) => {
+// Core tracking function - sends data to backend by changing image src
+const track = (event, extra = {}) => {
   if (!uuid.value) return
-  try {
-    const params = new URLSearchParams({
-      e: event,                           // "page_view", "click", "contact_click", "form_submit", "leave"
-      p: window.location.pathname,        // current page path e.g. "/about", "/contact"
-      u: uuid.value,                      // unique visitor ID (persistent in localStorage)
-      t: Date.now().toString(),           // when the event happened (milliseconds)
-      d: getDeviceType(),                 // "mobile" or "desktop"
-      r: getReferrer(),                   // where the visitor came from (previous URL)
-      ...extra                            // additional params: ct (contact_type), f (form_id), dur (duration)
-    })
-    const trackingUrl = `http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
-
-    // mode: 'no-cors' allows cross-origin requests without CORS errors
-    await fetch(trackingUrl, { mode: 'no-cors' })
-  } catch (error) {
-    // Fail silently - tracking should never break the site
-    console.error('Tracking failed:', error)
+  const params = new URLSearchParams({
+    e: event,                           // "page_view", "click", "contact_click", "form_submit", "leave"
+    p: window.location.pathname,        // current page path e.g. "/about", "/contact"
+    u: uuid.value,                      // unique visitor ID (persistent in localStorage)
+    t: Date.now().toString(),           // when the event happened (milliseconds)
+    d: getDeviceType(),                 // "mobile" or "desktop"
+    r: getReferrer(),                   // where the visitor came from (previous URL)
+    ...extra                            // additional params: ct (contact_type), f (form_id), dur (duration)
+  })
+  // Set image src to trigger the tracking request
+  if (trackingPixel.value) {
+    trackingPixel.value.src = `http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
   }
 }
 
@@ -88,7 +84,7 @@ const handlePageLeave = () => {
   const duration = Math.round((Date.now() - pageLoadTime) / 1000)
   console.log('handlePageLeave', duration + 's')
 
-  // Use fetch with keepalive for reliable GET tracking on page leave
+  // Use fetch with keepalive for reliable tracking on page leave (image won't work here)
   const params = new URLSearchParams({
     e: 'leave',                           // event type
     p: window.location.pathname,          // current page path
@@ -96,6 +92,7 @@ const handlePageLeave = () => {
     t: Date.now().toString(),             // timestamp
     dur: duration.toString()              // time spent on page (seconds)
   })
+  // Must use fetch with keepalive for beforeunload - image src change won't complete
   fetch(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
     mode: 'no-cors',
     keepalive: true 
@@ -118,5 +115,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div style="display: none"></div>
+  <!-- Hidden tracking pixel - src is changed to send tracking data -->
+  <img ref="trackingPixel" style="display: none" width="1" height="1" alt="" />
 </template>
