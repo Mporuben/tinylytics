@@ -8,6 +8,17 @@
   <p>Click anywhere to test click tracking</p>
   <button>Click me</button>
 
+  <h2>Contact Links (test contact_click)</h2>
+  <p><a href="tel:+421123456789">Call us: +421 123 456 789</a></p>
+  <p><a href="mailto:test@example.com">Email us: test@example.com</a></p>
+
+  <h2>Form (test form_submit)</h2>
+  <form id="contact-form" onsubmit="event.preventDefault(); alert('Form submitted!');">
+    <input type="text" name="name" placeholder="Your name" required>
+    <input type="email" name="email" placeholder="Your email" required>
+    <button type="submit">Submit Form</button>
+  </form>
+
   <script src="./dist/tlfab.iife.js"></script>
 </body>
 </html>
