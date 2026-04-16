@@ -28,20 +28,22 @@ const getReferrer = () => {
   return document.referrer || ''
 }
 
+// Core tracking function - sends data to backend via GET request
 const track = async (event, extra = {}) => {
   if (!uuid.value) return
   try {
     const params = new URLSearchParams({
-      event: event,
-      page: window.location.pathname,
-      uuid: uuid.value,
-      timestamp: Date.now().toString(),
-      device: getDeviceType(),
-      referrer: getReferrer(),
-      ...extra
+      event: event,                       // "pageview", "click", "contact_click", "form_submit", "leave"
+      page: window.location.pathname,     // current page path e.g. "/about", "/contact"
+      uuid: uuid.value,                   // unique visitor ID (persistent in localStorage)
+      timestamp: Date.now().toString(),   // when the event happened (milliseconds)
+      device: getDeviceType(),            // "mobile" or "desktop"
+      referrer: getReferrer(),            // where the visitor came from (previous URL)
+      ...extra                            // additional params: contact_type, form_id, duration
     })
     const trackingUrl = `https://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
     
+    // mode: 'no-cors' allows cross-origin requests without CORS errors
     await fetch(trackingUrl, { mode: 'no-cors' })
   } catch (error) {
     // Fail silently - tracking should never break the site
