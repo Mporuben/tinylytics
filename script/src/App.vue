@@ -33,13 +33,13 @@ const track = async (event, extra = {}) => {
   if (!uuid.value) return
   try {
     const params = new URLSearchParams({
-      event: event,                       // "pageview", "click", "contact_click", "form_submit", "leave"
-      page: window.location.pathname,     // current page path e.g. "/about", "/contact"
-      uuid: uuid.value,                   // unique visitor ID (persistent in localStorage)
-      timestamp: Date.now().toString(),   // when the event happened (milliseconds)
-      device: getDeviceType(),            // "mobile" or "desktop"
-      referrer: getReferrer(),            // where the visitor came from (previous URL)
-      ...extra                            // additional params: contact_type, form_id, duration
+      e: event,                           // "pageview", "click", "contact_click", "form_submit", "leave"
+      p: window.location.pathname,        // current page path e.g. "/about", "/contact"
+      u: uuid.value,                      // unique visitor ID (persistent in localStorage)
+      t: Date.now().toString(),           // when the event happened (milliseconds)
+      d: getDeviceType(),                 // "mobile" or "desktop"
+      r: getReferrer(),                   // where the visitor came from (previous URL)
+      ...extra                            // additional params: ct (contact_type), f (form_id), dur (duration)
     })
     const trackingUrl = `http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
 
@@ -58,12 +58,12 @@ const handleClick = (domEvent) => {
   if (target && target.href) {
     if (target.href.startsWith('tel:')) {
       console.log('handleContactClick - phone')
-      track('contact_click', { contact_type: 'phone' })
+      track('contact_click', { ct: 'phone' })
       return
     }
     if (target.href.startsWith('mailto:')) {
       console.log('handleContactClick - email')
-      track('contact_click', { contact_type: 'email' })
+      track('contact_click', { ct: 'email' })
       return
     }
   }
@@ -76,7 +76,7 @@ const handleFormSubmit = (domEvent) => {
   const form = domEvent.target
   const formId = form.id || form.name || 'unknown'
   console.log('handleFormSubmit', formId)
-  track('form_submit', { form_id: formId })
+  track('form_submit', { f: formId })
 }
 
 const handlePageView = () => {
@@ -90,11 +90,11 @@ const handlePageLeave = () => {
 
   // Use fetch with keepalive for reliable GET tracking on page leave
   const params = new URLSearchParams({
-    event: 'leave',
-    page: window.location.pathname,
-    uuid: uuid.value,
-    timestamp: Date.now().toString(),
-    duration: duration.toString()
+    e: 'leave',
+    p: window.location.pathname,
+    u: uuid.value,
+    t: Date.now().toString(),
+    dur: duration.toString()
   })
   fetch(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
     mode: 'no-cors',
