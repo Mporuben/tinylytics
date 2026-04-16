@@ -33,7 +33,7 @@ const track = async (event, extra = {}) => {
   if (!uuid.value) return
   try {
     const params = new URLSearchParams({
-      e: event,                           // "pageview", "click", "contact_click", "form_submit", "leave"
+      e: event,                           // "page_view", "click", "contact_click", "form_submit", "leave"
       p: window.location.pathname,        // current page path e.g. "/about", "/contact"
       u: uuid.value,                      // unique visitor ID (persistent in localStorage)
       t: Date.now().toString(),           // when the event happened (milliseconds)
@@ -81,7 +81,7 @@ const handleFormSubmit = (domEvent) => {
 
 const handlePageView = () => {
   console.log('handlePageView')
-  track('pageview')
+  track('page_view')
 }
 
 const handlePageLeave = () => {

@@ -28,7 +28,7 @@ This serves all files in the folder:
 # Todo list
 
 ## 🖥️ Frontend (Script) Work
-- [x] Pageview tracking (`e=pageview`)
+- [x] Page view tracking (`e=page_view`)
 - [x] Click tracking (`e=click`)
 - [x] UUID generation (`u`)
 - [x] Page path (`p`)
@@ -121,7 +121,7 @@ Use these texts for the info icons on the analytics dashboard.
 
 | Event | Param | Description | Extra params |
 |-------|-------|-------------|--------------|
-| `pageview` | `e=pageview` | User loads a page | - |
+| `page_view` | `e=page_view` | User loads a page | - |
 | `click` | `e=click` | User clicks anywhere | - |
 | `contact_click` | `e=contact_click` | User clicks phone/email link | `ct=phone\|email` |
 | `form_submit` | `e=form_submit` | User submits a form | `f=form-id` |
