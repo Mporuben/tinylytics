@@ -41,7 +41,7 @@ const track = async (event, extra = {}) => {
       referrer: getReferrer(),            // where the visitor came from (previous URL)
       ...extra                            // additional params: contact_type, form_id, duration
     })
-    const trackingUrl = `https://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
+    const trackingUrl = `http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
     
     // mode: 'no-cors' allows cross-origin requests without CORS errors
     await fetch(trackingUrl, { mode: 'no-cors' })
@@ -96,7 +96,7 @@ const handlePageLeave = () => {
     timestamp: Date.now().toString(),
     duration: duration.toString()
   })
-  fetch(`https://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
+  fetch(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
     mode: 'no-cors',
     keepalive: true 
   })
