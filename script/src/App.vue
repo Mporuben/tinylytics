@@ -84,7 +84,6 @@ const handlePageLeave = () => {
   const duration = Math.round((Date.now() - pageLoadTime) / 1000)
   console.log('handlePageLeave', duration + 's')
 
-  // Use fetch with keepalive for reliable tracking on page leave (image won't work here)
   const params = new URLSearchParams({
     e: 'leave',                           // event type
     p: window.location.pathname,          // current page path
@@ -92,11 +91,8 @@ const handlePageLeave = () => {
     t: Date.now().toString(),             // timestamp
     dur: duration.toString()              // time spent on page (seconds)
   })
-  // Must use fetch with keepalive for beforeunload - image src change won't complete
-  fetch(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
-    mode: 'no-cors',
-    keepalive: true 
-  })
+  // sendBeacon is designed for page unload - guaranteed to complete even after page closes
+  navigator.sendBeacon(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`)
 }
 
 onMounted(() => {
