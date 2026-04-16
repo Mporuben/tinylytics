@@ -13,7 +13,7 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 # Serve test pages
 
 ```bash
-python3 -m http.server 3000
+npx serve --cors
 ```
 
 This serves all files in the folder:
