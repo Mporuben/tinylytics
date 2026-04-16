@@ -40,7 +40,7 @@ const track = async (event, extra = {}) => {
       referrer: getReferrer(),
       ...extra
     })
-    const trackingUrl = `https://your-api.com/tlfab/abc.jpeg?${params.toString()}`
+    const trackingUrl = `https://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
     
     await fetch(trackingUrl, { mode: 'no-cors' })
   } catch (error) {
@@ -86,7 +86,7 @@ const handlePageLeave = () => {
   const duration = Math.round((Date.now() - pageLoadTime) / 1000)
   console.log('handlePageLeave', duration + 's')
   
-  // Use sendBeacon for reliable tracking on page leave
+  // Use fetch with keepalive for reliable GET tracking on page leave
   const params = new URLSearchParams({
     event: 'leave',
     page: window.location.pathname,
@@ -94,7 +94,10 @@ const handlePageLeave = () => {
     timestamp: Date.now().toString(),
     duration: duration.toString()
   })
-  navigator.sendBeacon(`https://your-api.com/tlfab/abc.jpeg?${params.toString()}`)
+  fetch(`https://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
+    mode: 'no-cors',
+    keepalive: true 
+  })
 }
 
 onMounted(() => {
