@@ -1,10 +1,16 @@
-# Vue 3 + Vite
+# Vue 3 + Vite App
+
+Run the Vite dev server:
+
+```bash
+npm run dev
+```
 
 This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
 Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
 
-# Serve
+# Serve test pages
 
 ```bash
 python3 -m http.server 3000
@@ -16,8 +22,8 @@ This serves all files in the folder:
 
 # API Endpoint
 
-Tracking data is sent to: `http://brrrrm.i-shipped.it/tlfab/logo.jpg` 
-Script file is served from: `http://brrrrm.i-shipped.it/script.js`
+- Tracking data is sent to: `http://brrrrm.i-shipped.it/tlfab/logo.jpg`
+- Script file is served from: `http://brrrrm.i-shipped.it/script.js`
 
 # Todo list
 
