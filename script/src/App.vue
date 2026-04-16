@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 const uuid = ref('')
 const pageLoadTime = Date.now()
 const trackingPixel = ref(null)  // Reference to the tracking pixel image
+const PROJECT_ID = 'tlfab'       // Hardcoded project identifier
 
 const setupUUID = () => {
   let visitorUUID = localStorage.getItem('tlfab_uuid')
@@ -33,6 +34,7 @@ const getReferrer = () => {
 const track = (event, extra = {}) => {
   if (!uuid.value) return
   const params = new URLSearchParams({
+    pid: PROJECT_ID,                    // project identifier
     e: event,                           // "page_view", "click", "contact_click", "form_submit", "leave"
     p: window.location.pathname,        // current page path e.g. "/about", "/contact"
     u: uuid.value,                      // unique visitor ID (persistent in localStorage)
@@ -85,6 +87,7 @@ const handlePageLeave = () => {
   console.log('handlePageLeave', duration + 's')
 
   const params = new URLSearchParams({
+    pid: PROJECT_ID,                      // project identifier
     e: 'leave',                           // event type
     p: window.location.pathname,          // current page path
     u: uuid.value,                        // unique visitor ID
