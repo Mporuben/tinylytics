@@ -16,7 +16,7 @@ const setupUUID = () => {
 
 const track = (event) => {
   if (!uuid.value) return
-  trackingSrc.value = `https://your-api.com/api/analytics/collect?e=${event}&p=${encodeURIComponent(window.location.pathname)}&u=${uuid.value}&t=${Date.now()}`
+  trackingSrc.value = `https://your-api.com/tlfab/abc.jpeg?e=${event}&p=${encodeURIComponent(window.location.pathname)}&u=${uuid.value}&t=${Date.now()}`
 }
 
 const handleClick = () => {
