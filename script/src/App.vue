@@ -3,22 +3,21 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { v4 as uuidv4 } from 'uuid'
 
 const uuid = ref('')
-const trackingSrc = ref('')
 const pageLoadTime = Date.now()
 
 const setupUUID = () => {
-  let _uuid = localStorage.getItem('u')
-  if (!_uuid) {
-    _uuid = uuidv4()
-    localStorage.setItem('u', _uuid)
+  let visitorUUID = localStorage.getItem('tlfab_uuid')
+  if (!visitorUUID) {
+    visitorUUID = uuidv4()
+    localStorage.setItem('tlfab_uuid', visitorUUID)
   }
-  uuid.value = _uuid
+  uuid.value = visitorUUID
 }
 
 // Device type detection
 const getDeviceType = () => {
-  const ua = navigator.userAgent
-  if (/Mobile|Android|iPhone|iPad|iPod/i.test(ua)) {
+  const userAgent = navigator.userAgent
+  if (/Mobile|Android|iPhone|iPad|iPod/i.test(userAgent)) {
     return 'mobile'
   }
   return 'desktop'
@@ -29,33 +28,40 @@ const getReferrer = () => {
   return document.referrer || ''
 }
 
-const track = (event, extra = {}) => {
+const track = async (event, extra = {}) => {
   if (!uuid.value) return
-  const params = new URLSearchParams({
-    e: event,
-    p: window.location.pathname,
-    u: uuid.value,
-    t: Date.now().toString(),
-    d: getDeviceType(),
-    r: getReferrer(),
-    ...extra
-  })
-  trackingSrc.value = `https://your-api.com/tlfab/abc.jpeg?${params.toString()}`
+  try {
+    const params = new URLSearchParams({
+      event: event,
+      page: window.location.pathname,
+      uuid: uuid.value,
+      timestamp: Date.now().toString(),
+      device: getDeviceType(),
+      referrer: getReferrer(),
+      ...extra
+    })
+    const trackingUrl = `https://your-api.com/tlfab/abc.jpeg?${params.toString()}`
+    
+    await fetch(trackingUrl, { mode: 'no-cors' })
+  } catch (error) {
+    // Fail silently - tracking should never break the site
+    console.error('Tracking failed:', error)
+  }
 }
 
-const handleClick = (e) => {
-  const target = e.target.closest('a')
+const handleClick = (domEvent) => {
+  const target = domEvent.target.closest('a')
   
   // Check for contact clicks (tel: or mailto:)
   if (target && target.href) {
     if (target.href.startsWith('tel:')) {
       console.log('handleContactClick - phone')
-      track('contact_click', { ct: 'phone' })
+      track('contact_click', { contact_type: 'phone' })
       return
     }
     if (target.href.startsWith('mailto:')) {
       console.log('handleContactClick - email')
-      track('contact_click', { ct: 'email' })
+      track('contact_click', { contact_type: 'email' })
       return
     }
   }
@@ -64,11 +70,11 @@ const handleClick = (e) => {
   track('click')
 }
 
-const handleFormSubmit = (e) => {
-  const form = e.target
+const handleFormSubmit = (domEvent) => {
+  const form = domEvent.target
   const formId = form.id || form.name || 'unknown'
   console.log('handleFormSubmit', formId)
-  track('form_submit', { fid: formId })
+  track('form_submit', { form_id: formId })
 }
 
 const handlePageView = () => {
@@ -82,11 +88,11 @@ const handlePageLeave = () => {
   
   // Use sendBeacon for reliable tracking on page leave
   const params = new URLSearchParams({
-    e: 'leave',
-    p: window.location.pathname,
-    u: uuid.value,
-    t: Date.now().toString(),
-    dur: duration.toString()
+    event: 'leave',
+    page: window.location.pathname,
+    uuid: uuid.value,
+    timestamp: Date.now().toString(),
+    duration: duration.toString()
   })
   navigator.sendBeacon(`https://your-api.com/tlfab/abc.jpeg?${params.toString()}`)
 }
@@ -107,10 +113,5 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <img
-    v-if="trackingSrc"
-    referrerpolicy="unsafe-url"
-    style="display: none"
-    :src="trackingSrc"
-  />
+  <div style="display: none"></div>
 </template>
