@@ -14,6 +14,11 @@ This serves all files in the folder:
 - http://localhost:3000/test.html - main test page
 - http://localhost:3000/referrer-test.html - test referrer tracking
 
+# API Endpoint
+
+Tracking data is sent to: `http://brrrrm.i-shipped.it/tlfab/logo.jpg` 
+Script file is served from: `http://brrrrm.i-shipped.it/script.js`
+
 # Todo list
 
 ## 🖥️ Frontend (Script) Work
