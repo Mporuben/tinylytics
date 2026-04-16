@@ -42,7 +42,7 @@ const track = async (event, extra = {}) => {
       ...extra                            // additional params: contact_type, form_id, duration
     })
     const trackingUrl = `http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`
-    
+
     // mode: 'no-cors' allows cross-origin requests without CORS errors
     await fetch(trackingUrl, { mode: 'no-cors' })
   } catch (error) {
@@ -53,7 +53,7 @@ const track = async (event, extra = {}) => {
 
 const handleClick = (domEvent) => {
   const target = domEvent.target.closest('a')
-  
+
   // Check for contact clicks (tel: or mailto:)
   if (target && target.href) {
     if (target.href.startsWith('tel:')) {
@@ -67,7 +67,7 @@ const handleClick = (domEvent) => {
       return
     }
   }
-  
+
   console.log('handleClick')
   track('click')
 }
@@ -87,7 +87,7 @@ const handlePageView = () => {
 const handlePageLeave = () => {
   const duration = Math.round((Date.now() - pageLoadTime) / 1000)
   console.log('handlePageLeave', duration + 's')
-  
+
   // Use fetch with keepalive for reliable GET tracking on page leave
   const params = new URLSearchParams({
     event: 'leave',
