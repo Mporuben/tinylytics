@@ -6,9 +6,13 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 
 # Serve
 
+```bash
 python3 -m http.server 3000
+```
 
-http://localhost:3000/test.html
+This serves all files in the folder:
+- http://localhost:3000/test.html - main test page
+- http://localhost:3000/referrer-test.html - test referrer tracking
 
 # Todo list
 
