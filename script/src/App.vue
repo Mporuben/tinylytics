@@ -90,11 +90,11 @@ const handlePageLeave = () => {
 
   // Use fetch with keepalive for reliable GET tracking on page leave
   const params = new URLSearchParams({
-    e: 'leave',
-    p: window.location.pathname,
-    u: uuid.value,
-    t: Date.now().toString(),
-    dur: duration.toString()
+    e: 'leave',                           // event type
+    p: window.location.pathname,          // current page path
+    u: uuid.value,                        // unique visitor ID
+    t: Date.now().toString(),             // timestamp
+    dur: duration.toString()              // time spent on page (seconds)
   })
   fetch(`http://brrrrm.i-shipped.it/tlfab/logo.jpg?${params.toString()}`, { 
     mode: 'no-cors',

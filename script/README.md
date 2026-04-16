@@ -114,3 +114,29 @@ Use these texts for the info icons on the analytics dashboard.
 
 ### Device Type
 > Whether visitors are using **mobile** (phones, tablets) or **desktop** (computers, laptops) devices.
+
+---
+
+# Tracked Events
+
+| Event | Param | Description | Extra params |
+|-------|-------|-------------|--------------|
+| `pageview` | `e=pageview` | User loads a page | - |
+| `click` | `e=click` | User clicks anywhere | - |
+| `contact_click` | `e=contact_click` | User clicks phone/email link | `ct=phone\|email` |
+| `form_submit` | `e=form_submit` | User submits a form | `f=form-id` |
+| `leave` | `e=leave` | User leaves the page | `dur=seconds` |
+
+## All URL Parameters
+
+| Param | Full name | Description |
+|-------|-----------|-------------|
+| `e` | event | Event type |
+| `p` | page | Current page path |
+| `u` | uuid | Unique visitor ID |
+| `t` | timestamp | When event happened (ms) |
+| `d` | device | `mobile` or `desktop` |
+| `r` | referrer | Where visitor came from |
+| `ct` | contact_type | `phone` or `email` (contact_click only) |
+| `f` | form_id | Form ID (form_submit only) |
+| `dur` | duration | Seconds on page (leave only) |
