@@ -66,6 +66,11 @@ const handleClick = (domEvent) => {
     }
   }
 
+  // Skip generic click if clicking form elements (form_submit will handle it)
+  if (domEvent.target.closest('form')) {
+    return
+  }
+
   console.log('handleClick')
   track('click')
 }
